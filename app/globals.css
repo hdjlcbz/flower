@@ -787,3 +787,88 @@ h3 {
     margin: 16px 0;
   }
 }
+
+/* Warm paper and botanical colors form the journal theme. */
+:root { --background:#fdfbf6; --foreground:#45463e; --card:#fffdf8; --card-foreground:#45463e; --popover:#fffdf8; --popover-foreground:#45463e; --primary:#98676c; --primary-foreground:#fff; --secondary:#f2e7e3; --secondary-foreground:#74585a; --muted:#f4f1eb; --muted-foreground:#78796e; --accent:#f0e4e0; --accent-foreground:#865d63; --border:#e6e1d7; --input:#ded9d0; --ring:#98676c; }
+body { background:#f8f6f0; }
+.flower-app { max-width:1600px; padding:0 48px; }
+.app-header { padding:24px 0; min-height:88px; background:transparent; border-color:#deded2; }
+.logo-icon { width:36px; height:36px; background:transparent; color:#7a826a; border:1px solid #d4d8c9; border-radius:50%; }
+.brand-label { color:#606856; font-family:Georgia,serif; font-size:12px; letter-spacing:2px; }
+.header-actions { gap:12px; }
+.header-actions [data-slot="button"] { font-size:12px; border-radius:5px; }
+.journal-intro { display:flex; align-items:center; justify-content:space-between; gap:36px; padding:44px 0 42px; }
+.intro-eyebrow { font-size:11px; letter-spacing:3px; color:#888779; margin-bottom:15px; }
+.journal-intro h1 { font-family:Georgia,'Times New Roman',serif; font-size:clamp(34px,4.2vw,66px); font-weight:400; line-height:1.1; letter-spacing:-2px; color:#4f5847; }
+.journal-intro h1 em { font-weight:400; font-size:.78em; letter-spacing:-.8px; }
+.intro-note { margin-right:36px; padding-left:26px; border-left:1px solid #dcdcd0; color:#8f7072; }
+.intro-note p { color:#6c6c60; font-size:14px; margin:15px 0 9px; }
+.intro-note span { font-size:12px; color:#939083; }
+.workspace { min-height:680px; grid-template-columns:minmax(0,1fr) 350px; border:1px solid #e2dfd4; border-radius:10px; overflow:hidden; box-shadow:0 12px 45px #5f655209; }
+.map-panel { position:relative; padding:29px 32px 22px; background:radial-gradient(ellipse at 55% 50%,#fffdf4 0%,#f3f3e9 65%,#eeefe4 100%); }
+.map-heading { align-items:center; }
+.section-kicker { color:#8b927e; letter-spacing:2.4px; font-size:10px; margin-bottom:7px; }
+.map-heading h2 { font-family:'Songti SC','STSong',Georgia,serif; color:#535c48; font-weight:500; letter-spacing:3px; font-size:27px; }
+.map-stats { background:transparent; border:none; padding:0; font-size:12px; color:#7a816f; }
+.map-stats span { color:#c3c7b6; margin:0 8px; }
+.map-controls { margin-top:25px; gap:10px; }
+.map-controls [data-slot="tabs-list"] { background:#e3e6d9; border-radius:5px; height:37px; }
+.map-controls [data-slot="tabs-trigger"] { border-radius:3px; font-size:12px; padding:5px 23px; }
+.map-controls [data-state="active"] { background:#fffdf7; color:#57634b; }
+.map-controls [data-slot="select-trigger"] { background:#fbfaf3b3; color:#717866; border-color:#dce0d0; border-radius:5px; font-size:12px; min-width:168px; }
+.china-map { max-height:510px; min-height:230px; margin:10px 0; flex:1; filter:drop-shadow(0 8px 8px #7384620b); }
+.region { fill:#dce2cd; stroke:#f5f5e9; stroke-width:1.6; transition:fill .25s; }
+.region:hover { fill:#bfcba8; }
+.region.selected { fill:#c8cfb7; stroke:#9ba782; }
+.region.lit { fill:#d7aeb0; }
+.region.lit:hover,.region.lit.selected { fill:#b8838c; }
+.city-halo { fill:#b7768340; }
+.city-dot { fill:#a56572; stroke:#fff8ed; stroke-width:2.5; }
+.city-label { fill:#656952; font-size:14px; stroke:#f8f7ed; }
+.map-bottom { border-top:1px solid #dde0d0; padding-top:18px; margin-top:0; }
+.map-legend { font-size:10px; gap:16px; }
+.map-legend i { background:#dce2cd; }
+.map-legend i.lit { background:#d7aeb0; }
+.map-legend i.city { background:#a56572; }
+.map-source { font-size:9px; color:#939984; }
+.records-panel { background:#fdfbf6; padding:26px; border-color:#e3e0d4; }
+.collection-label { display:flex; justify-content:space-between; color:#a08280; font-family:Georgia,serif; letter-spacing:2px; font-size:10px; margin-bottom:24px; }
+.panel-top { margin-bottom:14px; color:#929082; font-size:11px; }
+.panel-top [data-slot="button"] { font-size:11px; padding-right:0; color:#8e796f; }
+.records-panel > h2 { font-family:'Songti SC','STSong',serif; font-size:25px; font-weight:500; color:#555b4b; letter-spacing:2px; }
+.panel-count { font-size:11px; margin:9px 0 22px; color:#999486; }
+.empty-state { margin-top:30px; padding:22px 0; }
+.empty-icon { background:#f2ebe1; color:#9e7c78; border-radius:50%; width:54px; height:54px; }
+.empty-state h3 { font-family:'Songti SC','STSong',serif; font-weight:500; font-size:20px; color:#737464; }
+.empty-state p { font-size:12px; color:#949080; line-height:2; }
+.empty-state [data-slot="button"] { font-size:12px; background:transparent; border-color:#d7c5ba; color:#8c6e68; border-radius:4px; }
+.record-card { padding:9px 9px 0; border-color:#e5dfd3; border-radius:3px; box-shadow:0 5px 12px #655f4807; }
+.record-open { border-radius:0; background:transparent; }
+.cover { height:230px; border-radius:1px; }
+.record-body { padding:18px 9px 10px; }
+.record-body h3 { font-family:'Songti SC','STSong',serif; font-weight:500; font-size:20px; }
+.record-meta { font-family:Georgia,'Songti SC',serif; font-size:11px; letter-spacing:.7px; }
+.record-meaning { color:#986d74; }
+.record-actions { padding:5px 4px 8px; border-color:#eee9df; }
+.record-dialog { background:#fffdf8; border-color:#e2dbd0; }
+@media (max-width:1100px) { .flower-app { padding:0 28px; } .workspace { grid-template-columns:minmax(0,1fr) 310px; } .map-panel { padding:26px 22px 20px; } .records-panel { padding:24px 22px; } .intro-note { margin-right:0; } }
+@media (max-width:760px) { .flower-app { padding:0 18px; } .app-header { padding:17px 0; gap:12px; } .header-actions { gap:2px; } .brand-label { font-size:10px; letter-spacing:1px; } .journal-intro { padding:30px 0; gap:20px; } .journal-intro h1 { font-size:40px; letter-spacing:-1.5px; } .intro-note { display:none; } .workspace { grid-template-columns:1fr; min-height:0; } .map-panel { padding:25px 20px 20px; } .china-map { margin:20px 0; min-height:0; max-height:460px; } .records-panel { border-left:none; padding:25px; } .collection-label { margin-bottom:20px; } }
+@media (max-width:500px) { .header-actions { width:auto; margin-left:auto; } .header-actions [data-slot="button"] { font-size:11px; padding:0 8px; height:32px; } .header-actions svg { width:13px; } .logo { gap:7px; } .brand-label { font-size:9px; letter-spacing:.5px; max-width:65px; white-space:normal; line-height:1.6; } .logo-icon { width:29px; height:29px; } .logo-icon svg { width:18px; } .journal-intro h1 { font-size:36px; } .intro-eyebrow { font-size:10px; } .map-panel { padding:23px 15px 18px; } .map-heading h2 { font-size:23px; } .map-stats { font-size:10px; } .map-controls [data-slot="tabs-trigger"] { padding:5px 18px; } .map-controls [data-slot="select-trigger"] { min-width:145px; width:145px; font-size:11px; } .map-legend { gap:12px; font-size:9px; } .map-source { font-size:8px; } }
+.intro-note { position:relative; width:430px; min-height:156px; margin-right:0; padding:22px 25px; border:0; border-radius:5px; overflow:hidden; background:#f0e9dc; }
+.intro-flowers { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 48%; z-index:0; }
+.intro-note > svg,.intro-note > p,.intro-note > span { position:relative; z-index:1; }
+.intro-note p { font-size:12px; max-width:200px; }
+.intro-note span { font-size:10px; color:#817e71; }
+.journal-photo { width:100%; padding:8px 8px 12px; background:#fffefb; border:1px solid #e8e0d3; box-shadow:0 5px 14px #79715e0c; transform:rotate(-2deg); margin-bottom:29px; }
+.journal-photo img { width:100%; aspect-ratio:4/3; object-fit:cover; }
+.journal-photo > span { display:block; margin-top:10px; font-family:Georgia,serif; color:#a4937e; font-size:8px; letter-spacing:2px; }
+.empty-state { margin-top:0; }
+.empty-state .empty-icon { display:none; }
+.no-photo { background:#f1eee5; color:#9b9586; }
+.small-count { background:#f0e6e1; color:#88636a; }
+.cover-label { background:var(--primary); }
+.gallery-thumbs button[aria-pressed="true"] { border-color:var(--primary); }
+.gallery-main,.photo-tile { background:#f4f0e8; }
+.unlock-ring { stroke:#a56572; }
+@media(max-width:1100px) { .intro-note { width:340px; } }
+@media(max-width:760px) { .intro-note { display:none; } .journal-photo { max-width:360px; } }

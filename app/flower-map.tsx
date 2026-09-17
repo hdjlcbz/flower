@@ -470,7 +470,7 @@ export default function FlowerMap() {
           <span className="logo-icon">
             <Flower2 size={23} />
           </span>
-          <h1>FLOWERS, WHEREVER I GO</h1>
+          <span className="brand-label">THE FLOWER JOURNAL</span>
         </div>
         <div className="header-actions">
           <Button
@@ -507,12 +507,24 @@ export default function FlowerMap() {
           )}
         </div>
       </header>
+      <section className="journal-intro" aria-labelledby="journal-title">
+        <div>
+          <p className="intro-eyebrow">花束收藏 · 城市记录</p>
+          <h1 id="journal-title">FLOWERS,<br /><em>WHEREVER I GO</em></h1>
+        </div>
+        <div className="intro-note">
+          <img src="/floral-still-life.jpg" alt="" className="intro-flowers" />
+          <Flower2 size={22} strokeWidth={1} aria-hidden="true" />
+          <p>关于花，也关于一起记得的地方。</p>
+          <span>照片、日期，还有每一束的意义。</span>
+        </div>
+      </section>
       <section className="workspace">
         <div className="map-panel">
           <div className="map-heading">
             <div>
-              <p className="section-kicker">城市足迹</p>
-              <h2>{view === "china" ? "中国地图" : "世界地图"}</h2>
+              <p className="section-kicker">{view === "china" ? "01 / CHINA" : "02 / WORLD"}</p>
+              <h2>{view === "china" ? "中国足迹" : "世界足迹"}</h2>
             </div>
             <div className="map-stats">
               {mapCities.length} 个城市 <span>/</span>
@@ -648,6 +660,7 @@ export default function FlowerMap() {
                   {unlock === c.code && (
                     <circle r="13" className="unlock-ring" />
                   )}
+                  <circle r="15" className="city-halo" />
                   <circle r={city === c.code ? 8 : 6} className="city-dot" />
                   {(city === c.code || mapCities.length <= 8) && (
                     <text
@@ -690,6 +703,7 @@ export default function FlowerMap() {
           </div>
         </div>
         <aside className="records-panel">
+          <p className="collection-label">THE COLLECTION <Flower2 size={15} strokeWidth={1.2} aria-hidden="true" /></p>
           <div className="panel-top">
             <span>
               {view === "china" ? "中国" : "世界"} <ChevronRight size={14} />
@@ -750,6 +764,7 @@ export default function FlowerMap() {
               </div>
             ) : !authenticated ? (
               <div className="empty-state">
+                <div className="journal-photo"><img src="/floral-still-life.jpg" alt="" /><span>YOUR FLOWER JOURNAL</span></div>
                 <span className="empty-icon">
                   <LogIn size={28} />
                 </span>
@@ -763,6 +778,7 @@ export default function FlowerMap() {
               </div>
             ) : visible.length === 0 ? (
               <div className="empty-state">
+                <div className="journal-photo"><img src="/floral-still-life.jpg" alt="" /><span>YOUR FLOWER JOURNAL</span></div>
                 <span className="empty-icon">
                   <MapPin size={30} />
                 </span>
