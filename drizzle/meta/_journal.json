@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1789616068440,
+      "tag": "0000_sleepy_vertigo",
+      "breakpoints": true
+    }
+  ]
+}
