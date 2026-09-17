@@ -10,12 +10,7 @@ export class ApiError extends Error {
     super(message);
   }
 }
-function ensureJournalOpen(): void {
-  // Temporarily close all stored journal content without deleting data.
-  throw new ApiError(403, "姜佳欣 就不给你看");
-}
 export function db() {
-  ensureJournalOpen();
   if (!env.DB) throw new ApiError(503, "记录服务暂不可用，请稍后重试。");
   return env.DB;
 }
