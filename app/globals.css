@@ -886,3 +886,11 @@ body { background:#f8f6f0; }
 .collection-hint { text-align:center; font-size:10px; color:#a69987; margin:0 0 4px; }
 .city-tabs { max-height:100px; overflow-y:auto; }
 @media(max-width:760px) { .records-panel .cover { height:auto; aspect-ratio:4/3; max-height:320px; } .record-list { max-width:420px; margin:0 auto; } }
+.city-halo,.city-dot,.map-city { transition:fill .4s,filter .4s,r .4s; }
+.city-light { fill:#fff5d4; pointer-events:none; }
+.region.selected { stroke:#956d73; stroke-width:2.5; }
+.map-legend .glow-one { border-radius:50%; background:#d28e9e; box-shadow:0 0 3px #e2b2a4; }
+.map-legend .glow-few { border-radius:50%; background:#eda8b8; box-shadow:0 0 6px #e5ad99; }
+.map-legend .glow-many { border-radius:50%; background:#ffd1db; box-shadow:0 0 9px #db9c7d; border:1px solid #ecc3a3; }
+.brightness-note { color:#9a887f; font-size:10px; }
+@media(prefers-reduced-motion:reduce) { .city-halo,.city-dot,.map-city { transition:none; } }

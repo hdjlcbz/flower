@@ -263,6 +263,25 @@ export default function FlowerMap() {
       ? country === "all" || c.countryCode === country
       : c.countryCode === "CHN" &&
         (province === "all" || c.provinceCode === province));
+  const counts = useMemo(() => {
+    const cityCounts = new Map<string, number>();
+    const provinceCounts = new Map<string, number>();
+    const countryCounts = new Map<string, number>();
+    const increment = (m: Map<string, number>, key: string) =>
+      m.set(key, (m.get(key) ?? 0) + 1);
+    for (const record of active) {
+      const c = cityByCode.get(record.cityCode);
+      if (!c) continue;
+      increment(cityCounts, c.code);
+      increment(countryCounts, c.countryCode);
+      if (c.countryCode === "CHN") increment(provinceCounts, c.provinceCode);
+    }
+    return {
+      cities: cityCounts,
+      provinces: provinceCounts,
+      countries: countryCounts,
+    };
+  }, [active]);
   const provinceRecords = active.filter((r) =>
       inScope(cityByCode.get(r.cityCode)),
     ),
@@ -621,6 +640,18 @@ export default function FlowerMap() {
                 <path
                   key={p.code}
                   d={p.path || ""}
+                  style={(() => {
+                    const count =
+                      (view === "china"
+                        ? counts.provinces
+                        : counts.countries
+                      ).get(p.code) ?? 0;
+                    return count
+                      ? {
+                          fill: `hsl(350  ${26 + (30 * count) / (count + 3)}% ${85 - (22 * count) / (count + 3)}%)`,
+                        }
+                      : undefined;
+                  })()}
                   className={
                     "region" +
                     ((view === "china" ? litProvinces : litCountries).has(
@@ -640,11 +671,18 @@ export default function FlowerMap() {
                     }
                   }}
                 >
-                  <title>{p.name || "边界"}</title>
+                  <title>
+                    {p.name || "边界"}
+                    {p.name
+                      ? ` · ${(view === "china" ? counts.provinces : counts.countries).get(p.code) ?? 0} 束花`
+                      : ""}
+                  </title>
                 </path>
               ),
             )}
             {mapCities.map((c) => {
+              const count = counts.cities.get(c.code) ?? 0;
+              const strength = count / (count + 3);
               const [x, y] =
                 view === "china"
                   ? point(c.center)
@@ -660,6 +698,9 @@ export default function FlowerMap() {
                 <g
                   key={c.code}
                   className="map-city"
+                  style={{
+                    filter: `drop-shadow(0 0 ${2 + 9 * strength}px rgba(231, 154, 135, ${0.3 + 0.6 * strength}))`,
+                  }}
                   transform={"translate(" + x + "," + y + ")"}
                   onClick={() => {
                     if (view === "china") setProvince(c.provinceCode);
@@ -667,17 +708,25 @@ export default function FlowerMap() {
                     setCity(c.code);
                   }}
                 >
-                  <title>
-                    {c.name +
-                      " · " +
-                      active.filter((r) => r.cityCode === c.code).length +
-                      "次送花"}
-                  </title>
+                  <title>{c.name + " · " + count + "次送花"}</title>
                   {unlock === c.code && (
                     <circle r="13" className="unlock-ring" />
                   )}
-                  <circle r="15" className="city-halo" />
-                  <circle r={city === c.code ? 8 : 6} className="city-dot" />
+                  <circle
+                    r={12 + 14 * strength}
+                    className="city-halo"
+                    style={{
+                      fill: `rgba(221, 137, 143, ${0.12 + 0.24 * strength})`,
+                    }}
+                  />
+                  <circle
+                    r={(city === c.code ? 8 : 6) + 3 * strength}
+                    className="city-dot"
+                    style={{
+                      fill: `hsl(350 ${40 + 40 * strength}% ${62 + 18 * strength}%)`,
+                    }}
+                  />
+                  <circle r={1.5 + 2 * strength} className="city-light" />
                   {(city === c.code || mapCities.length <= 8) && (
                     <text
                       x={c.name === "杭州市" ? -12 : 10}
@@ -691,7 +740,7 @@ export default function FlowerMap() {
                       textAnchor={c.name === "杭州市" ? "end" : "start"}
                       className="city-label"
                     >
-                      {c.name.replace(/市$/, "")}
+                      {c.name.replace(/市$/, "")} · {count}
                     </text>
                   )}
                 </g>
@@ -705,14 +754,19 @@ export default function FlowerMap() {
                 暂无记录
               </span>
               <span>
-                <i className="lit" />
-                已有送花记录
+                <i className="glow-one" />1 束
               </span>
               <span>
-                <i className="city" />
-                点亮的城市
+                <i className="glow-few" />
+                2–5 束
+              </span>
+              <span>
+                <i className="glow-many" />6 束以上
               </span>
             </div>
+            <span className="brightness-note">
+              送得越多，城市越亮 · 区域按总束数着色
+            </span>
             <span className="map-source">
               地图数据：{view === "china" ? "DataV GeoAtlas" : "Natural Earth"}
             </span>
