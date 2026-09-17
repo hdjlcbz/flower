@@ -672,10 +672,9 @@ export default function FlowerMap() {
                   }}
                 >
                   <title>
-                    {p.name || "边界"}
-                    {p.name
+                    {(p.name || "边界") + (p.name
                       ? ` · ${(view === "china" ? counts.provinces : counts.countries).get(p.code) ?? 0} 束花`
-                      : ""}
+                      : "")}
                   </title>
                 </path>
               ),
