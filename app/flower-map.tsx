@@ -212,6 +212,7 @@ export default function FlowerMap() {
           error?: string;
           records: FlowerRecord[];
           user?: { email: string };
+          canEdit?: boolean;
         };
       if (r.status === 401) {
         setAuthenticated(false);
@@ -220,7 +221,7 @@ export default function FlowerMap() {
       }
       if (!r.ok) throw new Error(v.error);
       setRecords(v.records);
-      setAuthenticated(true);
+      setAuthenticated(v.canEdit === true);
       setLoadError("");
     } catch (e) {
       setLoadError(e instanceof Error ? e.message : "记录加载失败。");
@@ -473,25 +474,29 @@ export default function FlowerMap() {
           <span className="brand-label">THE FLOWER JOURNAL</span>
         </div>
         <div className="header-actions">
-          <Button
-            variant="ghost"
-            onClick={() => setBackupOpen(true)}
-            disabled={!authenticated}
-          >
-            <Download />
-            备份
-          </Button>
-          <Button
-            variant="ghost"
-            onClick={() => setTrashOpen(true)}
-            disabled={!authenticated}
-          >
-            <Archive />
-            回收站
-            {trash.length > 0 && (
-              <span className="small-count">{trash.length}</span>
-            )}
-          </Button>
+          {authenticated && (
+            <Button
+              variant="ghost"
+              onClick={() => setBackupOpen(true)}
+              disabled={!authenticated}
+            >
+              <Download />
+              备份
+            </Button>
+          )}
+          {authenticated && (
+            <Button
+              variant="ghost"
+              onClick={() => setTrashOpen(true)}
+              disabled={!authenticated}
+            >
+              <Archive />
+              回收站
+              {trash.length > 0 && (
+                <span className="small-count">{trash.length}</span>
+              )}
+            </Button>
+          )}
           {authenticated ? (
             <Button onClick={add}>
               <Plus />
@@ -501,7 +506,7 @@ export default function FlowerMap() {
             <Button asChild>
               <a href="/signin-with-chatgpt?return_to=%2F" target="_top">
                 <LogIn />
-                登录
+                管理登录
               </a>
             </Button>
           )}
@@ -510,7 +515,11 @@ export default function FlowerMap() {
       <section className="journal-intro" aria-labelledby="journal-title">
         <div>
           <p className="intro-eyebrow">花束收藏 · 城市记录</p>
-          <h1 id="journal-title">FLOWERS,<br /><em>WHEREVER I GO</em></h1>
+          <h1 id="journal-title">
+            FLOWERS,
+            <br />
+            <em>WHEREVER I GO</em>
+          </h1>
         </div>
         <div className="intro-note">
           <img src="/floral-still-life.jpg" alt="" className="intro-flowers" />
@@ -523,7 +532,9 @@ export default function FlowerMap() {
         <div className="map-panel">
           <div className="map-heading">
             <div>
-              <p className="section-kicker">{view === "china" ? "01 / CHINA" : "02 / WORLD"}</p>
+              <p className="section-kicker">
+                {view === "china" ? "01 / CHINA" : "02 / WORLD"}
+              </p>
               <h2>{view === "china" ? "中国足迹" : "世界足迹"}</h2>
             </div>
             <div className="map-stats">
@@ -703,7 +714,10 @@ export default function FlowerMap() {
           </div>
         </div>
         <aside className="records-panel">
-          <p className="collection-label">THE COLLECTION <Flower2 size={15} strokeWidth={1.2} aria-hidden="true" /></p>
+          <p className="collection-label">
+            THE COLLECTION{" "}
+            <Flower2 size={15} strokeWidth={1.2} aria-hidden="true" />
+          </p>
           <div className="panel-top">
             <span>
               {view === "china" ? "中国" : "世界"} <ChevronRight size={14} />
@@ -762,36 +776,27 @@ export default function FlowerMap() {
                   重试
                 </Button>
               </div>
-            ) : !authenticated ? (
-              <div className="empty-state">
-                <div className="journal-photo"><img src="/floral-still-life.jpg" alt="" /><span>YOUR FLOWER JOURNAL</span></div>
-                <span className="empty-icon">
-                  <LogIn size={28} />
-                </span>
-                <h3>登录后查看记录</h3>
-                <p>照片和送花记录保存在你的账号中。</p>
-                <Button asChild>
-                  <a href="/signin-with-chatgpt?return_to=%2F" target="_top">
-                    登录
-                  </a>
-                </Button>
-              </div>
             ) : visible.length === 0 ? (
               <div className="empty-state">
-                <div className="journal-photo"><img src="/floral-still-life.jpg" alt="" /><span>YOUR FLOWER JOURNAL</span></div>
+                <div className="journal-photo">
+                  <img src="/floral-still-life.jpg" alt="" />
+                  <span>YOUR FLOWER JOURNAL</span>
+                </div>
                 <span className="empty-icon">
                   <MapPin size={30} />
                 </span>
-                <h3>还没有送花记录</h3>
+                <h3>这里还没有花束</h3>
                 <p>
-                  添加城市、照片和寓意，
-                  <br />
-                  城市会在地图上点亮。
+                  {authenticated
+                    ? "添加城市、照片和寓意，点亮这座城市。"
+                    : "有新的花束记录后，会在这里展示。"}
                 </p>
-                <Button variant="outline" onClick={add}>
-                  <Plus />
-                  添加第一条记录
-                </Button>
+                {authenticated && (
+                  <Button variant="outline" onClick={add}>
+                    <Plus />
+                    添加第一条记录
+                  </Button>
+                )}
               </div>
             ) : (
               <div className="record-list">
@@ -834,21 +839,27 @@ export default function FlowerMap() {
                         {r.story && <p className="record-excerpt">{r.story}</p>}
                       </div>
                     </button>
-                    <div className="record-actions">
-                      <Button size="sm" variant="ghost" onClick={() => edit(r)}>
-                        <Pencil />
-                        编辑
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => setDeleting(r)}
-                        aria-label={"删除" + r.title}
-                      >
-                        <Trash2 />
-                        删除
-                      </Button>
-                    </div>
+                    {authenticated && (
+                      <div className="record-actions">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => edit(r)}
+                        >
+                          <Pencil />
+                          编辑
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => setDeleting(r)}
+                          aria-label={"删除" + r.title}
+                        >
+                          <Trash2 />
+                          删除
+                        </Button>
+                      </div>
+                    )}
                   </article>
                 ))}
               </div>
@@ -1140,12 +1151,14 @@ export default function FlowerMap() {
                   <p>{detail.story}</p>
                 </div>
               )}
-              <div className="form-footer">
-                <Button variant="outline" onClick={() => edit(detail)}>
-                  <Pencil />
-                  编辑记录
-                </Button>
-              </div>
+              {authenticated && (
+                <div className="form-footer">
+                  <Button variant="outline" onClick={() => edit(detail)}>
+                    <Pencil />
+                    编辑记录
+                  </Button>
+                </div>
+              )}
             </>
           )}
         </DialogContent>

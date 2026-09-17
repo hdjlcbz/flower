@@ -1,17 +1,25 @@
-import { bucket, db, error, user, ApiError, validId } from "@/lib/server";
+import {
+  bucket,
+  db,
+  error,
+  journalOwner,
+  ApiError,
+  validId,
+} from "@/lib/server";
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const u = await user(),
+    const { ownerId, canEdit } = await journalOwner(),
       { id } = await params;
     if (!validId(id)) throw new ApiError(404, "照片不存在。");
     const p = await db()
       .prepare(
-        "SELECT object_key AS key, mime FROM photos WHERE id = ? AND owner_id = ?",
+        "SELECT p.object_key AS key, p.mime FROM photos p JOIN records r ON p.record_id = r.id AND p.owner_id = r.owner_id WHERE p.id = ? AND p.owner_id = ?" +
+          (canEdit ? "" : " AND r.deleted_at IS NULL"),
       )
-      .bind(id, u.userId)
+      .bind(id, ownerId ?? "")
       .first<{ key: string; mime: string }>();
     if (!p) throw new ApiError(404, "照片不存在。");
     const object = await bucket().get(p.key);

@@ -68,7 +68,22 @@ const cleanup = async () => {
 };
 
 try {
-  assert.equal((await fetch(base + "/api/records")).status, 401);
+  const publicList = await fetch(base + "/api/records");
+  assert.equal(publicList.status, 200);
+  const publicData = await publicList.json();
+  assert.equal(publicData.canEdit, false);
+  assert.equal(publicData.user, undefined);
+  assert.ok(publicData.records.every((r) => !r.deletedAt));
+  assert.equal((await fetch(base + "/api/backup")).status, 401);
+  for (const [path, method] of [
+    ["/api/records", "POST"],
+    ["/api/records/" + ids[0], "PUT"],
+    ["/api/records/" + ids[0] + "?version=1", "DELETE"],
+    ["/api/records/" + ids[0] + "/restore", "POST"],
+  ]) {
+    assert.equal((await fetch(base + path, { method })).status, 401);
+  }
+  assert.equal((await (await request("/api/records")).json()).canEdit, true);
   assert.equal(
     (
       await request("/api/records", {
@@ -115,7 +130,7 @@ try {
   assert.equal(record.photos.length, 1);
   const photoId = record.photos[0].id;
   assert.equal((await request("/api/photos/" + photoId)).status, 200);
-  assert.equal((await fetch(base + "/api/photos/" + photoId)).status, 401);
+  assert.equal((await fetch(base + "/api/photos/" + photoId)).status, 200);
   const edited = {
     ...draft,
     title: "已编辑的测试记录",
@@ -156,6 +171,9 @@ try {
   );
   listed = (await (await request("/api/records")).json()).records;
   assert.ok(listed.find((r) => r.id === ids[0]).deletedAt);
+  const afterDelete = await (await fetch(base + "/api/records")).json();
+  assert.ok(!afterDelete.records.some((r) => r.id === ids[0]));
+  assert.equal((await fetch(base + "/api/photos/" + photoId)).status, 404);
   assert.equal(
     listed.filter((r) => ids.includes(r.id) && !r.deletedAt).length,
     1,

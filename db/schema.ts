@@ -1,4 +1,8 @@
 import { integer, sqliteTable, text, index } from "drizzle-orm/sqlite-core";
+export const journalSettings = sqliteTable("journal_settings", {
+  key: text("key").primaryKey(),
+  value: text("value").notNull(),
+});
 export const records = sqliteTable(
   "records",
   {

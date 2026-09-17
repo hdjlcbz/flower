@@ -1,10 +1,10 @@
-import { error, json, list, save, user } from "@/lib/server";
+import { error, json, list, save, journalOwner } from "@/lib/server";
 export async function GET() {
   try {
-    const u = await user();
+    const { ownerId, canEdit } = await journalOwner();
     return json({
-      records: await list(u.userId),
-      user: { email: u.email, name: u.displayName },
+      records: ownerId ? await list(ownerId, canEdit) : [],
+      canEdit,
     });
   } catch (e) {
     return error(e);

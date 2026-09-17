@@ -28,7 +28,34 @@ export async function user(request?: Request) {
   }
   const u = await getChatGPTUser();
   if (!u) throw new ApiError(401, "请先登录，再查看或维护记录。");
+  if (!isOwner(u.email))
+    throw new ApiError(403, "只有网站所有者可以维护记录。");
+  const { ownerId } = await journalOwner();
+  if (ownerId !== u.userId) throw new ApiError(403, "相册维护身份不匹配。");
   return u;
+}
+export function isOwner(email: string) {
+  const ownerEmail = (env as unknown as { FLOWER_MAP_OWNER_EMAIL?: string })
+    .FLOWER_MAP_OWNER_EMAIL;
+  return !!ownerEmail && email.toLowerCase() === ownerEmail.toLowerCase();
+}
+export async function journalOwner() {
+  const u = await getChatGPTUser();
+  const canEdit = !!u && isOwner(u.email);
+  if (canEdit) {
+    await db()
+      .prepare(
+        "INSERT OR IGNORE INTO journal_settings (key, value) VALUES ('owner_id', ?)",
+      )
+      .bind(u!.userId)
+      .run();
+  }
+  const setting = await db()
+    .prepare("SELECT value FROM journal_settings WHERE key = 'owner_id'")
+    .first<{ value: string }>();
+  if (canEdit && setting && setting.value !== u!.userId)
+    throw new ApiError(403, "相册维护身份不匹配，请联系网站所有者。");
+  return { ownerId: setting?.value, canEdit };
 }
 export function json(value: unknown, status = 200) {
   return Response.json(value, {
@@ -50,10 +77,12 @@ export function validId(s: unknown): s is string {
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s)
   );
 }
-export async function list(owner: string) {
+export async function list(owner: string, includeDeleted = true) {
   const result = await db()
     .prepare(
-      "SELECT id, city_code AS cityCode, date, title, flower, meaning, story, deleted_at AS deletedAt, created_at AS createdAt, updated_at AS updatedAt, version FROM records WHERE owner_id = ? ORDER BY date DESC, created_at DESC",
+      "SELECT id, city_code AS cityCode, date, title, flower, meaning, story, deleted_at AS deletedAt, created_at AS createdAt, updated_at AS updatedAt, version FROM records WHERE owner_id = ?" +
+        (includeDeleted ? "" : " AND deleted_at IS NULL") +
+        " ORDER BY date DESC, created_at DESC",
     )
     .bind(owner)
     .all<FlowerRecord>();
@@ -180,13 +209,11 @@ export async function parse(request: Request) {
       webp =
         String.fromCharCode(...magic.slice(0, 4)) === "RIFF" &&
         String.fromCharCode(...magic.slice(8, 12)) === "WEBP";
-    if (
-      !(
-        (f.type === "image/jpeg" && jpg) ||
-        (f.type === "image/png" && png) ||
-        (f.type === "image/webp" && webp)
-      )
-    )
+    if (!(
+      (f.type === "image/jpeg" && jpg) ||
+      (f.type === "image/png" && png) ||
+      (f.type === "image/webp" && webp)
+    ))
       throw new ApiError(400, "仅支持JPEG、PNG和WebP图片。");
   }
   if (total > 12 * 1024 * 1024) throw new ApiError(400, "照片总大小最多12MB。");

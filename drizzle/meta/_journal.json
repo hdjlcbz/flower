@@ -8,6 +8,13 @@
       "when": 1789616068440,
       "tag": "0000_sleepy_vertigo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1789635389942,
+      "tag": "0001_square_synch",
+      "breakpoints": true
     }
   ]
 }
