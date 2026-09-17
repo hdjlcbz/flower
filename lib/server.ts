@@ -10,12 +10,7 @@ export class ApiError extends Error {
     super(message);
   }
 }
-function ensureJournalOpen(): void {
-  // Closing the page also closes direct record, photo and backup access.
-  throw new ApiError(403, "不给你看了！");
-}
 export function db() {
-  ensureJournalOpen();
   if (!env.DB) throw new ApiError(503, "记录服务暂不可用，请稍后重试。");
   return env.DB;
 }
