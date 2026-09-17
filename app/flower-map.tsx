@@ -184,6 +184,7 @@ export default function FlowerMap() {
     [loading, setLoading] = useState(true),
     [loadError, setLoadError] = useState(""),
     [authenticated, setAuthenticated] = useState(false),
+    [collectionPage, setCollectionPage] = useState(0),
     [view, setView] = useState("china"),
     [country, setCountry] = useState("all"),
     [province, setProvince] = useState("all"),
@@ -279,6 +280,10 @@ export default function FlowerMap() {
     setProvince(value);
     setCity("");
   }
+  useEffect(() => {
+    setCollectionPage(0);
+  }, [view, province, country, city]);
+  const currentPage = Math.min(collectionPage, Math.max(0, visible.length - 1));
   function add() {
     setEditing(null);
     setDraft({ ...emptyDraft(), cityCode: city });
@@ -800,7 +805,32 @@ export default function FlowerMap() {
               </div>
             ) : (
               <div className="record-list">
-                {visible.map((r) => (
+                <nav className="collection-pager" aria-label="花束相册翻页">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="上一束花"
+                    disabled={currentPage === 0}
+                    onClick={() => setCollectionPage(currentPage - 1)}
+                  >
+                    <ChevronLeft />
+                  </Button>
+                  <span aria-live="polite">
+                    <strong>{String(currentPage + 1).padStart(2, "0")}</strong>{" "}
+                    / {String(visible.length).padStart(2, "0")}{" "}
+                    <small>束花</small>
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="下一束花"
+                    disabled={currentPage >= visible.length - 1}
+                    onClick={() => setCollectionPage(currentPage + 1)}
+                  >
+                    <ChevronRight />
+                  </Button>
+                </nav>
+                {visible.slice(currentPage, currentPage + 1).map((r) => (
                   <article key={r.id} className="record-card">
                     <button
                       className="record-open"
@@ -862,6 +892,9 @@ export default function FlowerMap() {
                     )}
                   </article>
                 ))}
+                <p className="collection-hint">
+                  点击照片，查看这束花的完整记录
+                </p>
               </div>
             )}
           </div>
