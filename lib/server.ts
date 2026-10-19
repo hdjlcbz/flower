@@ -66,7 +66,7 @@ export function json(value: unknown, status = 200) {
 export function error(e: unknown) {
   if (e instanceof ApiError) return json({ error: e.message }, e.status);
   console.error(
-    "Flower map storage operation failed",
+    "Travel journal storage operation failed",
     e instanceof Error ? e.name : "unknown",
   );
   return json({ error: "操作没有完成，输入已保留，请稍后重试。" }, 503);
@@ -172,7 +172,7 @@ export async function parse(request: Request) {
     draft.date >
       new Date(Date.now() + 8 * 3600 * 1000).toISOString().slice(0, 10)
   )
-    throw new ApiError(400, "请选择今天或之前的有效送花日期。");
+    throw new ApiError(400, "请选择今天或之前的有效到访日期。");
   if (
     !Array.isArray(draft.keepPhotos) ||
     draft.keepPhotos.some((p) => !validId(p)) ||

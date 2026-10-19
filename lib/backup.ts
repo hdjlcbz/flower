@@ -48,7 +48,7 @@ export async function validateBackup(file: File) {
         row.format !== "flower-map" ||
         row.version !== 1
       )
-        throw new Error("请选择送花地图导出的备份文件。");
+        throw new Error("请选择这个旅行地图导出的备份文件。");
       continue;
     }
     if (row.type === "record") {

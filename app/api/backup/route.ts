@@ -59,7 +59,7 @@ export async function GET() {
       headers: {
         "Content-Type": "application/x-ndjson",
         "Content-Disposition":
-          'attachment; filename="flower-map-backup-' +
+          'attachment; filename="our-places-backup-' +
           new Date().toISOString().slice(0, 10) +
           '.ndjson"',
         "Cache-Control": "private, no-store",

@@ -894,3 +894,51 @@ body { background:#f8f6f0; }
 .map-legend .glow-many { border-radius:50%; background:#ffd1db; box-shadow:0 0 9px #db9c7d; border:1px solid #ecc3a3; }
 .brightness-note { color:#9a887f; font-size:10px; }
 @media(prefers-reduced-motion:reduce) { .city-halo,.city-dot,.map-city { transition:none; } }
+/* Travel journal: ink, parchment and terracotta replace the floral palette. */
+:root { --background:#f4efe4; --foreground:#243b42; --card:#fffaf0; --card-foreground:#243b42; --popover:#fffaf0; --popover-foreground:#243b42; --primary:#b95f3d; --primary-foreground:#fffaf2; --secondary:#dfe8e4; --secondary-foreground:#27434a; --muted:#ebe5d9; --muted-foreground:#6f7773; --accent:#f0dfce; --accent-foreground:#8e472f; --border:#ddd3c2; --input:#d3c8b7; --ring:#b95f3d; }
+body { background:#f3eee3; color:#243b42; background-image:linear-gradient(rgba(39,67,74,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(39,67,74,.025) 1px,transparent 1px); background-size:24px 24px; }
+.logo-icon { color:#b95f3d; border-color:#c9bda9; background:#fff9ed; }
+.brand-label { color:#27434a; }
+.journal-intro h1 { color:#213a43; font-family:Georgia,'Times New Roman',serif; letter-spacing:-1px; }
+.intro-eyebrow { color:#aa593d; }
+.intro-note { background:#dbe4df; color:#243b42; min-height:164px; border:1px solid #bdccc5; padding:22px 26px; overflow:hidden; }
+.intro-note::before { content:""; position:absolute; inset:-30px; opacity:.35; background:repeating-radial-gradient(circle at 70% 55%,transparent 0 25px,#6f8a82 26px 27px,transparent 28px 43px); transform:rotate(-8deg); }
+.intro-note > .journey-card,.intro-note > p,.intro-note > span { position:relative; z-index:1; }
+.journey-card { width:132px; min-height:73px; display:grid; grid-template-columns:28px 1fr; grid-template-rows:1fr auto; align-items:center; padding:12px; background:#fff8e9; border:1px solid #c9b99f; box-shadow:5px 5px 0 #b95f3d; transform:rotate(-3deg); }
+.journey-card svg { color:#b95f3d; grid-row:1/3; }
+.journey-card strong { color:#213a43; font:600 10px/1.2 Georgia,serif; letter-spacing:1.1px; }
+.journey-card small { color:#8a7c67; font:8px/1.2 Georgia,serif; letter-spacing:.7px; }
+.journey-route { position:absolute; width:100px; height:1px; border-top:1px dashed #b95f3d; transform:rotate(-12deg); right:-119px; top:30px; }
+.intro-note p { margin:21px 0 7px; color:#314b50; }
+.intro-note span { color:#647773; }
+.workspace { border-color:#d8cfbf; box-shadow:0 16px 50px rgba(40,55,51,.08); }
+.map-panel { background:radial-gradient(ellipse at 55% 48%,#fffaf0 0%,#eaf0eb 62%,#dfe7e1 100%); }
+.map-heading h2,.records-panel > h2 { color:#213a43; }
+.section-kicker { color:#a95739; }
+.map-controls [data-slot="tabs-list"] { background:#d2dfda; }
+.map-controls [data-state="active"] { color:#213a43; background:#fff8e9; }
+.map-controls [data-slot="select-trigger"] { background:#fff9edcc; color:#3d5559; border-color:#c9d1c7; }
+.region { fill:#cddbd4; stroke:#f6f0e5; }
+.region:hover { fill:#adc5ba; }
+.region.selected { stroke:#8d492f; }
+.city-dot { stroke:#fff7e8; }
+.city-light { fill:#fff2c6; }
+.city-label { fill:#244148; stroke:#f4f1e7; }
+.map-bottom { border-color:#cbd6cf; }
+.records-panel { background:#fffaf0; border-color:#d8cfbf; }
+.collection-label { color:#a95739; }
+.record-card { background:#fffdf7; border-color:#d9cdbb; box-shadow:7px 7px 0 rgba(39,67,74,.07); }
+.record-meaning { color:#a95739; }
+.small-count { background:#e0e8e3; color:#34555b; }
+.collection-pager strong { color:#a95739; }
+.collection-pager [data-slot="button"] { color:#a95739; border-color:#d7c7b1; }
+.travel-placeholder { min-height:170px; display:grid; place-items:center; color:#b95f3d; background:linear-gradient(135deg,#e0e9e4,#f3e6d6); border-color:#d1c1ab; transform:rotate(-1deg); }
+.travel-placeholder > span { color:#38545a; }
+.empty-icon { background:#e2e9e4; color:#b95f3d; }
+.map-legend .glow-one { background:#cf8c6b; box-shadow:0 0 3px #d7a283; }
+.map-legend .glow-few { background:#e79b73; box-shadow:0 0 6px #d98d65; }
+.map-legend .glow-many { background:#ffc291; box-shadow:0 0 9px #ce7148; border-color:#e8a378; }
+.brightness-note { color:#796e5e; }
+.unlock-ring { stroke:#c36846; }
+.record-dialog { background:#fffaf0; border-color:#d9cdbb; }
+@media(max-width:760px) { .journey-card { width:120px; } }

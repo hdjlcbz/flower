@@ -7,7 +7,6 @@ import {
   type FormEvent,
 } from "react";
 import {
-  Flower2,
   Plus,
   MapPin,
   Archive,
@@ -442,9 +441,9 @@ export default function FlowerMap() {
       Promise.resolve(
         context.registerTool(
           {
-            name: "select_flower_map_province",
-            title: "查看省份送花记录",
-            description: "选择省级区域查看当前地图记录，仅改变浏览状态。",
+            name: "select_travel_map_region",
+            title: "查看省份旅行记录",
+            description: "选择省级区域查看共同去过的地方，仅改变浏览状态。",
             inputSchema: {
               type: "object",
               properties: { provinceCode: { type: "string" } },
@@ -493,9 +492,9 @@ export default function FlowerMap() {
       <header className="app-header">
         <div className="logo">
           <span className="logo-icon">
-            <Flower2 size={23} />
+            <MapPin size={20} />
           </span>
-          <span className="brand-label">THE FLOWER JOURNAL</span>
+          <span className="brand-label">OUR TRAVEL JOURNAL</span>
         </div>
         <div className="header-actions">
           {authenticated && (
@@ -538,18 +537,22 @@ export default function FlowerMap() {
       </header>
       <section className="journal-intro" aria-labelledby="journal-title">
         <div>
-          <p className="intro-eyebrow">花束收藏 · 城市记录</p>
+          <p className="intro-eyebrow">两个人 · 去过的地方</p>
           <h1 id="journal-title">
-            FLOWERS,
+            PLACES
             <br />
-            <em>WHEREVER I GO</em>
+            <em>WE&apos;VE BEEN</em>
           </h1>
         </div>
         <div className="intro-note">
-          <img src="/floral-still-life.jpg" alt="" className="intro-flowers" />
-          <Flower2 size={22} strokeWidth={1} aria-hidden="true" />
-          <p>关于花，也关于一起记得的地方。</p>
-          <span>照片、日期，还有每一束的意义。</span>
+          <div className="journey-card" aria-hidden="true">
+            <MapPin size={21} strokeWidth={1.4} />
+            <span className="journey-route" />
+            <strong>OUR PLACES</strong>
+            <small>CHINA · WORLD</small>
+          </div>
+          <p>我们一起到过的城市。</p>
+          <span>日期、照片，还有一路上的记忆。</span>
         </div>
       </section>
       <section className="workspace">
@@ -570,7 +573,7 @@ export default function FlowerMap() {
                     cityByCode.get(r.cityCode)?.countryCode === "CHN",
                 ).length
               }{" "}
-              次送花
+              条记录
             </div>
           </div>
           <div className="map-controls">
@@ -630,11 +633,11 @@ export default function FlowerMap() {
             role="group"
             aria-label={
               view === "china"
-                ? "点击省份查看送花记录"
-                : "点击国家或地区查看送花记录"
+                ? "点击省份查看共同旅行记录"
+                : "点击国家或地区查看共同旅行记录"
             }
           >
-            <title>{view === "china" ? "中国送花地图" : "世界送花地图"}</title>
+            <title>{view === "china" ? "中国旅行地图" : "世界旅行地图"}</title>
             {(view === "china" ? map.provinces : worldMap.countries).map(
               (p) => (
                 <path
@@ -648,7 +651,7 @@ export default function FlowerMap() {
                       ).get(p.code) ?? 0;
                     return count
                       ? {
-                          fill: `hsl(350  ${26 + (30 * count) / (count + 3)}% ${85 - (22 * count) / (count + 3)}%)`,
+                          fill: `hsl(18 ${30 + (38 * count) / (count + 3)}% ${86 - (24 * count) / (count + 3)}%)`,
                         }
                       : undefined;
                   })()}
@@ -673,7 +676,7 @@ export default function FlowerMap() {
                 >
                   <title>
                     {(p.name || "边界") + (p.name
-                      ? ` · ${(view === "china" ? counts.provinces : counts.countries).get(p.code) ?? 0} 束花`
+                      ? ` · ${(view === "china" ? counts.provinces : counts.countries).get(p.code) ?? 0} 条记录`
                       : "")}
                   </title>
                 </path>
@@ -698,7 +701,7 @@ export default function FlowerMap() {
                   key={c.code}
                   className="map-city"
                   style={{
-                    filter: `drop-shadow(0 0 ${2 + 9 * strength}px rgba(231, 154, 135, ${0.3 + 0.6 * strength}))`,
+                    filter: `drop-shadow(0 0 ${2 + 9 * strength}px rgba(218, 119, 74, ${0.3 + 0.6 * strength}))`,
                   }}
                   transform={"translate(" + x + "," + y + ")"}
                   onClick={() => {
@@ -707,7 +710,7 @@ export default function FlowerMap() {
                     setCity(c.code);
                   }}
                 >
-                  <title>{c.name + " · " + count + "次送花"}</title>
+                  <title>{c.name + " · " + count + "条记录"}</title>
                   {unlock === c.code && (
                     <circle r="13" className="unlock-ring" />
                   )}
@@ -715,14 +718,14 @@ export default function FlowerMap() {
                     r={12 + 14 * strength}
                     className="city-halo"
                     style={{
-                      fill: `rgba(221, 137, 143, ${0.12 + 0.24 * strength})`,
+                      fill: `rgba(219, 123, 80, ${0.12 + 0.24 * strength})`,
                     }}
                   />
                   <circle
                     r={(city === c.code ? 8 : 6) + 3 * strength}
                     className="city-dot"
                     style={{
-                      fill: `hsl(350 ${40 + 40 * strength}% ${62 + 18 * strength}%)`,
+                      fill: `hsl(18 ${48 + 38 * strength}% ${56 + 18 * strength}%)`,
                     }}
                   />
                   <circle r={1.5 + 2 * strength} className="city-light" />
@@ -753,18 +756,18 @@ export default function FlowerMap() {
                 暂无记录
               </span>
               <span>
-                <i className="glow-one" />1 束
+                <i className="glow-one" />1 次
               </span>
               <span>
                 <i className="glow-few" />
-                2–5 束
+                2–5 次
               </span>
               <span>
-                <i className="glow-many" />6 束以上
+                <i className="glow-many" />6 次以上
               </span>
             </div>
             <span className="brightness-note">
-              送得越多，城市越亮 · 区域按总束数着色
+              记录越多，城市越亮 · 区域按到访次数着色
             </span>
             <span className="map-source">
               地图数据：{view === "china" ? "DataV GeoAtlas" : "Natural Earth"}
@@ -773,8 +776,8 @@ export default function FlowerMap() {
         </div>
         <aside className="records-panel">
           <p className="collection-label">
-            THE COLLECTION{" "}
-            <Flower2 size={15} strokeWidth={1.2} aria-hidden="true" />
+            OUR PLACES{" "}
+            <MapPin size={15} strokeWidth={1.2} aria-hidden="true" />
           </p>
           <div className="panel-top">
             <span>
@@ -794,7 +797,7 @@ export default function FlowerMap() {
           </div>
           <h2>{city ? cityByCode.get(city)?.name : name}</h2>
           <p className="panel-count">
-            {provinceCities.length} 个城市 · {provinceRecords.length} 束花
+            {provinceCities.length} 个城市 · {provinceRecords.length} 条记录
           </p>
           {provinceCities.length > 0 && (
             <div className="city-tabs">
@@ -836,18 +839,18 @@ export default function FlowerMap() {
               </div>
             ) : visible.length === 0 ? (
               <div className="empty-state">
-                <div className="journal-photo">
-                  <img src="/floral-still-life.jpg" alt="" />
-                  <span>YOUR FLOWER JOURNAL</span>
+                <div className="journal-photo travel-placeholder">
+                  <MapPin size={34} strokeWidth={1.1} aria-hidden="true" />
+                  <span>OUR TRAVEL JOURNAL</span>
                 </div>
                 <span className="empty-icon">
                   <MapPin size={30} />
                 </span>
-                <h3>这里还没有花束</h3>
+                <h3>这里还没有共同足迹</h3>
                 <p>
                   {authenticated
-                    ? "添加城市、照片和寓意，点亮这座城市。"
-                    : "有新的花束记录后，会在这里展示。"}
+                    ? "添加城市、日期和照片，点亮这座城市。"
+                    : "有新的旅行记录后，会在这里展示。"}
                 </p>
                 {authenticated && (
                   <Button variant="outline" onClick={add}>
@@ -858,11 +861,11 @@ export default function FlowerMap() {
               </div>
             ) : (
               <div className="record-list">
-                <nav className="collection-pager" aria-label="花束相册翻页">
+                <nav className="collection-pager" aria-label="旅行相册翻页">
                   <Button
                     variant="ghost"
                     size="icon"
-                    aria-label="上一束花"
+                    aria-label="上一条记录"
                     disabled={currentPage === 0}
                     onClick={() => setCollectionPage(currentPage - 1)}
                   >
@@ -871,12 +874,12 @@ export default function FlowerMap() {
                   <span aria-live="polite">
                     <strong>{String(currentPage + 1).padStart(2, "0")}</strong>{" "}
                     / {String(visible.length).padStart(2, "0")}{" "}
-                    <small>束花</small>
+                    <small>条记录</small>
                   </span>
                   <Button
                     variant="ghost"
                     size="icon"
-                    aria-label="下一束花"
+                    aria-label="下一条记录"
                     disabled={currentPage >= visible.length - 1}
                     onClick={() => setCollectionPage(currentPage + 1)}
                   >
@@ -946,7 +949,7 @@ export default function FlowerMap() {
                   </article>
                 ))}
                 <p className="collection-hint">
-                  点击照片，查看这束花的完整记录
+                  点击照片，查看这段旅程的完整记录
                 </p>
               </div>
             )}
@@ -961,9 +964,9 @@ export default function FlowerMap() {
       >
         <DialogContent className="record-dialog sm:max-w-2xl">
           <DialogHeader>
-            <DialogTitle>{editing ? "编辑记录" : "添加送花记录"}</DialogTitle>
+            <DialogTitle>{editing ? "编辑记录" : "添加旅行记录"}</DialogTitle>
             <DialogDescription>
-              每次送花单独保存，同一城市可以有多条记录。
+              每次出行单独保存，同一城市可以记录很多次。
             </DialogDescription>
           </DialogHeader>
           {draft && (
@@ -977,7 +980,7 @@ export default function FlowerMap() {
                   />
                 </div>
                 <div className="form-field">
-                  <label htmlFor="date">送花日期 *</label>
+                  <label htmlFor="date">到访日期 *</label>
                   <Input
                     id="date"
                     type="date"
@@ -993,29 +996,29 @@ export default function FlowerMap() {
                     id="title"
                     value={draft.title}
                     maxLength={100}
-                    placeholder="例如：杭州的郁金香"
+                    placeholder="例如：南京的秋天"
                     onChange={(e) => field("title", e.target.value)}
                     required
                   />
                 </div>
                 <div className="form-field full">
-                  <label htmlFor="flower">花材与颜色</label>
+                  <label htmlFor="flower">这次记得什么</label>
                   <Input
                     id="flower"
                     value={draft.flower}
                     maxLength={150}
-                    placeholder="例如：粉色郁金香、白色洋桔梗"
+                    placeholder="例如：一起看的展、路边的小店"
                     onChange={(e) => field("flower", e.target.value)}
                   />
                 </div>
                 <div className="form-field full">
-                  <label htmlFor="meaning">这束花的寓意</label>
+                  <label htmlFor="meaning">关于这次旅行</label>
                   <Textarea
                     id="meaning"
                     value={draft.meaning}
                     maxLength={500}
                     rows={2}
-                    placeholder="写下你选择它的理由"
+                    placeholder="写下一句最想记住的话"
                     onChange={(e) => field("meaning", e.target.value)}
                   />
                 </div>
@@ -1221,13 +1224,13 @@ export default function FlowerMap() {
               )}
               {detail.flower && (
                 <div className="detail-field">
-                  <h3>花材与颜色</h3>
+                  <h3>这次记得什么</h3>
                   <p>{detail.flower}</p>
                 </div>
               )}
               {detail.meaning && (
                 <div className="detail-field">
-                  <h3>这束花的寓意</h3>
+                  <h3>关于这次旅行</h3>
                   <p>{detail.meaning}</p>
                 </div>
               )}
